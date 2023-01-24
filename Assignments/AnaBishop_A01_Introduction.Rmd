@@ -40,21 +40,25 @@ Enter answers to the questions just below the >Answer: prompt.
 1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
 
 > Answer: 
+I started using R my freshman year of undergrad, in 2017. Since then, I have been coding with R and RStudio relatively consistently for the past six years. I have used R in many biology classes, and also used it in my own independent research. That project mainly consisted of analyzing data frames. I have used Git before in one other class, so I have about a year's worth of experience using Git and Github. I want data analytics and R to be an integral part of my future career, and I feel like constant repetition is crucial for becoming proficient enough to make it a strong skill of mine. So, my goals for taking this class are to maintain my coding skills, continue to improve my skills, practices, and workflow, and also to learn how to use R and its packages in ways that I never have before, such as to look at spatial data and also using the shiny package. 
 
 2. Are there any components of the course about which you feel confident?
 
 > Answer: 
+I feel confident in my ability to use R at a basic/beginner level. I have used tidyverse, dyplyr, ggplot, and other statistical coding packages frequently. However, there is always more to learn, and I'm excited to learn how to use those packages more efficiently and professionally.
 
 3. Are there any components of the course about which you feel apprehensive?
 
 > Answer: 
+Aside from the modules of the course that are purely new material for me, I feel like I have a poor understanding of what the things going on in R actually mean. For example, I could probably vaguely explain what a vector vs. dataframe vs. a tibble are, but I feel like I don't actually have a great understanding of what they are. So, I'm excited to learn more about what the underlying parts of coding mean and do, instead of only focusing on what lines to code that get my desired output. I hope to deepen my conceptual understanding of how R works. I'm also pretty bad at writing loops, I don't have much experience with them, and I hope to become less scared of them this semester. 
 
 
 ## 3) GitHub
 
 Provide a link below to your forked course repository in GitHub. Make sure you have pulled all recent changes from the course repository and that you have updated your course README file, committed those changes, and pushed them to your GitHub account. 
 
-> Answer: 
+> Answer:
+https://github.com/anabishop99/EDA-Spring2023
 
 ## 4) Knitting
 When you have completed this document, click the `knit` button.This should produce a PDF copy of your markdown document. Submit this PDF to Sakai. 
