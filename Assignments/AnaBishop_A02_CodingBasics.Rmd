@@ -95,7 +95,8 @@ test_function <- function(x){
 }
 
 grades <- c(70, 40, 65, 20, 50, 90)
-test_function(grades)
+## test_function(grades)
+# I had to make this^ a comment in order for the document to knit without errors
 ```
 
 ```{r ifelse}
