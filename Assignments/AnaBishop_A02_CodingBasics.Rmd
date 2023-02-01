@@ -43,7 +43,9 @@ mean
 median
 
 #3. 
-mean>median # testing whether the mean is greater than the median. If it's not, the output will be "FALSE" (which it was)
+mean>median 
+# testing whether the mean is greater than the median. If it's not, 
+#the output will be "FALSE" (which it was)
 ```
 
 ## Basics Day 2
