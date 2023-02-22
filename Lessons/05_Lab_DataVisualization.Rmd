@@ -48,6 +48,7 @@ ggplot(data=data.frame(x=0,y=0))+
     y=0.025,
     label=expression(paste("Mean is ", mu,",", R^{2},'=0.6'))
     )
+## note - putting the aesthetics within the specific geom_point, etc lets you put multiple datasets into one plot. If you put it in the ggplot command then it will only apply that data to the plot
 
 #Print the plot
 print(Plot_text)
@@ -92,15 +93,28 @@ EPAair$Date <- ymd(EPAair$Date)
 Say we want to plot the number of records each month in the Peter/Paul lakes dataset. How might we do that? What challenges do we face? 
 
 ```{r Plot the number of records by month}
-#What kind of values are months?
+#What kind of values are months? - integer
+class(PeterPaul.chem.nutrients$month)
 
-#List unique values
+#List unique values - 2, 5, 6, 7, 8, 9, 10, 11
+unique(PeterPaul.chem.nutrients$month)
 
-#Plot how many Lake observations occur each month
+#Plot how many Lake observations occur each month - bar plot is good. A histogram would show the spread of the data as a continuous variable which isn't what we want - we want discreet observations by month. Bar plots work for every discrete/unique value
+  #ggplot(PeterPaul.chem.nutrients, aes(x=month)) + 
+   #geom_histogram()
+
+ggplot(PeterPaul.chem.nutrients, aes(x=month)) + 
+  geom_bar()
 
 #Convert month to a factor -- with 12 levels, labelled with month names
+PeterPaul.chem.nutrients$month <- as.factor(PeterPaul.chem.nutrients$month)
+factor(PeterPaul.chem.nutrients$month, levels = 1:12)
 
 #Try again: Plot how many Lake observations occur each month
+ggplot(PeterPaul.chem.nutrients, aes(x=factor(month, level=1:12, labels=month.abb))) + 
+  geom_bar() + 
+  scale_x_discrete(drop=FALSE) +
+  labs(x="Month", y="Count")
 
 #Alter to include missing months
 
@@ -146,10 +160,17 @@ surface_temp_1999_plot
 surface_temp_1999_plot + 
   theme_gray()
 
+surface_temp_1999_plot + 
+  theme_classic()
+
 #Apply a ggtheme
 surface_temp_1999_plot + 
   theme_wsj() + 
   scale_color_wsj()
+
+surface_temp_1999_plot + 
+  theme_economist() + 
+  scale_color_economist()
 
 #Add a title
 surface_temp_1999_plot + 
@@ -225,10 +246,16 @@ Exercise: build your own scatterplots of PeterPaul.chem.nutrients
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
 
 # 1. 
-# Plot surface temperatures by day of  year. 
+# Plot surface temperatures by day of year. 
 # Color your points by year, and facet by lake in two rows.
 # Change the ylab name
 
+PeterPaul.chem.nutrients %>%
+  filter(depth == 0) %>%
+  ggplot(aes(y = temperature_C, x = daynum, color=year4)) + 
+  geom_point(size=0.5, alpha=0.5) +
+  facet_wrap(vars(lakename)) +
+  labs(x = "Julian Day", y = "SST", color = "Year")
 
 #2. 
 # Plot temperature by date. Color your points by depth.
