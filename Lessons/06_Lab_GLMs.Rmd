@@ -105,7 +105,7 @@ library(corrplot)
 ozone_explanatories <- 
   EPAair %>%
   select(mean_Lat:Ozone) %>%
-  drop_na()
+  drop_na() #drop_na eliminates all NAs overall, and na.omit eliminates NAs only in specific columns. However, in this case, both would have done the same thing
 
 ozone_corr <- cor(ozone_explanatories)
 corrplot(ozone_corr, method = "ellipse")
