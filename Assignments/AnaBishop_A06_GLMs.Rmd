@@ -162,8 +162,8 @@ summary(lake_temps_linear)
 
 ```{r scatterplot.2}
 #14.
-ggplot(chem_phys_clean, aes(x = depth, y = temperature_C)) +
-  geom_point(aes(color = lakename, alpha = 0.5)) +
+ggplot(chem_phys_clean, aes(x = depth, y = temperature_C, color = lakename)) +
+  geom_point(aes(alpha = 0.5)) +
   geom_smooth(method = lm, se = FALSE) +
   labs(title = str_wrap("Effect of Depth on Lake Temperature During the Month of July, Categorized by Lake", 40), x = "Depth (m)", y = "Temperature (C)", color = "Lake Name") +
   guides(alpha = FALSE) +
