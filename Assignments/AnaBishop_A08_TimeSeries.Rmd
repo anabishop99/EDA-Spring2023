@@ -26,6 +26,10 @@ This exercise accompanies the lessons in Environmental Data Analytics on general
 * Load the tidyverse, lubridate, zoo, and trend packages
 * Set your ggplot theme
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=40), tidy=TRUE)
+```
+
 ```{r}
 #1
 #load libraries
@@ -114,7 +118,7 @@ ggplot(GaringerOzone, aes(x = Date, y = Daily.Max.8.hour.Ozone.Concentration)) +
   ggtitle("Timeseries of Garinger Ozone Concentration")
 ```
 
->Answer: The trendline appears to be nearly horizontal, athough a slight decrease is visible. Therefore, though there does not seem to be a strong trend in the data, since the data oscillates back and forth at the same levels fairly regularly over the years, a slightly decreasing trend is visible.
+>Answer: The trendline appears to be nearly horizontal, although a slight decrease is visible. Therefore, though there does not seem to be a strong trend in the data, since the data oscillates back and forth at the same levels fairly regularly over the years, a slightly decreasing trend is apparent.
 
 ## Time Series Analysis
 
@@ -127,7 +131,7 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 GaringerOzone$Daily.Max.8.hour.Ozone.Concentration <- na.approx(GaringerOzone$Daily.Max.8.hour.Ozone.Concentration)  
 ```
 
-> Answer: Linear interpolation assumes that the missing value falls between the previous and next datapoint according to a linear equation drawn through the entire dataset, and estimates a value that falls between those other two values based on that linear relationship. In comparison, piecewise constant interpolation is assumed to be equal to the nearest datapoint, and spline interpolation uses a quadratic relationship within the data instead of a linear relationship. We used a linear interpolation because the data was only missing in small pieces in between two datapoints, which does not merit the use of piecewise constant interpolation, and the relationship within the data appears to follow a linear relationship, as opposed to a quadratic relationship. 
+> Answer: Linear interpolation assumes that the missing value falls between the previous and next datapoint according to a linear equation drawn through the entire dataset, and estimates a value that falls between those other two values based on that linear relationship. In comparison, piecewise constant interpolation is assumed to be equal to the nearest known datapoint, and spline interpolation uses a quadratic relationship to represent the data instead of a linear relationship. We used a linear interpolation because the data was only missing in small pieces in between two datapoints, which does not merit the use of piecewise constant interpolation, and the relationship within the data appears to follow a linear relationship, as opposed to a quadratic relationship. 
 
 
 9. Create a new data frame called `GaringerOzone.monthly` that contains aggregated data: mean ozone concentrations for each month. In your pipe, you will need to first add columns for year and month to form the groupings. In a separate line of code, create a new Date column with each month-year combination being set as the first day of the month (this is for graphing purposes only)
@@ -217,7 +221,6 @@ monthly_noseasonality_analysis <- Kendall::SeasonalMannKendall(GaringerOzone.mon
 #show results
 monthly_noseasonality_analysis
 summary(monthly_noseasonality_analysis)
-
 ```
 
-> Answer: The results of this test were exactly the same as the previous test. 
+> Answer: The results of this test were exactly the same as the previous test. From these results, it appears that manually removing seasonality from the data achieved the same result as the seasonal Mann-Kendall test on the initial dataset.
