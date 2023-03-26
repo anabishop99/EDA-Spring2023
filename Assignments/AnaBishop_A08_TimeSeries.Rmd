@@ -216,11 +216,11 @@ GaringerOzone_monthly_noseasonality <- GaringerOzone_monthly_Components %>%
 GaringerOzone.monthly.noseasonality.ts <- ts(GaringerOzone_monthly_noseasonality$NoSeasonality, start = c(2010,1), frequency = 12)
 
 #conduct analysis
-monthly_noseasonality_analysis <- Kendall::SeasonalMannKendall(GaringerOzone.monthly.noseasonality.ts)
+monthly_noseasonality_analysis <- Kendall::MannKendall(GaringerOzone.monthly.noseasonality.ts)
 
 #show results
 monthly_noseasonality_analysis
 summary(monthly_noseasonality_analysis)
 ```
 
-> Answer: The results of this test were exactly the same as the previous test. From these results, it appears that manually removing seasonality from the data achieved the same result as the seasonal Mann-Kendall test on the initial dataset.
+> Answer: The p-value obtained from this test was much smaller than the p-value from the previous test (p = 0.008 vs. p = 0.047, respectively), meaning that the decreasing trend was stronger and more significant when using the nonseasonal data. This makes sense, because removing seasonality most likely decreases the amount of variability in the data, therefore leading to a stronger, more defined relationship.
