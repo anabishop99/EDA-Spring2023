@@ -77,7 +77,7 @@ Next we'll read in some USGS/NWIS gage location data added to the `Data/Raw` fol
 
 ```{r Read in USGS Gage Locations}
 #7. Read in gage locations csv as a dataframe
-gages <- read.csv("./Data/Raw/NWIS_SiteInfo_NE_RAW.csv", stringsAsFactors = TRUE)
+gages <- read.csv("./Data/Raw/NWIS_SiteInfo_NE_RAW.csv", colClasses = c('site_no' = 'factor'), stringsAsFactors = TRUE)
 
 #8. Reveal the names of the columns
 colnames(gages)
@@ -146,20 +146,22 @@ Lastly, we want to attach some gage height data to our site locations. I've cons
 
 ```{r}
 #14. Read the site flow data into a data frame
-
+mean_gage_ht <- read.csv("./Data/Raw/NWIS_SiteFlowData_NE_RAW.csv",
+  colClasses = c('site_no' = 'factor')) %>%  
+  group_by(site_no, station_nm) %>% 
+  summarize(MeanGageHT = mean(gage_ht))
 
 #15. Show the column names
-
+colnames(mean_gage_ht)
 
 #16. Join the flow data to our NWIS gage location spatial dataframe
-
+gage_flow_data <- inner_join(mean_gage_ht, gages_spatial)
 
 #17. Show the column names of the joined dataset
-
+colnames(gage_flow_data)
 
 #18. Show the dimensions of this joined dataset
-
-
+dim(gage_flow_data) #118 rows, 8 columns
 ```
 
 ### Map the pattern of gage height data
