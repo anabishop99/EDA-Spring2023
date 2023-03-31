@@ -1,11 +1,13 @@
 ---
-title: "Assignment 9: Spatial Analysis in R"
+title: 'Assignment 9: Spatial Analysis in R'
 author: "Ana Bishop"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 geometry: margin=2.54cm
-editor_options: 
+editor_options:
   chunk_output_type: console
-  markdown: 
+  markdown:
     wrap: 72
 ---
 
@@ -51,19 +53,23 @@ In this exercise, we will be exploring stream gage height data in Nebraska corre
 ```{r Read the county data into an sf dataframe}
 #3. Read in Counties shapefile into an sf dataframe, filtering for just NE counties
 ne_counties <- st_read('./Data/Spatial/cb_2018_us_county_20m.shp') %>%
-  filter(STATEFP == "31")
+  filter(STATEFP == 31)
 
 #4. Reveal the CRS of the counties features
 st_crs(ne_counties) #NAD83
 
 #5. Plot the data
 ggplot(data=ne_counties) +
-  geom_sf()
+  geom_sf() +
+  labs(title = "The State of Nebraska and its Counties",
+       subtitle = "Ana Bishop") +
+  theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
 ```
 
 6. What is the EPSG code of the Counties dataset? Is this a geographic or a projected coordinate reference system? (Or, does this CRS use angular or planar coordinate units?) To what datum is this CRS associated? (Tip: look the EPSG code on <https://spatialreference.org>) 
 
 > ANSWER: 
+
 > The CRS for this dataset is NAD83, and the EPSG code for this dataset is 4269. It is associated to the North American Datum 1983, based on the Geodetic Reference System (GRS) 1980 ellipsoid. This CRS is a geographic coordinate reference system.
 
 
@@ -84,7 +90,9 @@ colnames(gages)
 ```
 
 9. What columns in the dataset contain the x and y coordinate values, respectively?  
+
 > ANSWER:
+
 > The x coordinates come from the longitude values, located in the "dec_long_va" column. The y coordinates come from the latitude values, located in the "dec_lat_va" column.
 
 
@@ -108,6 +116,7 @@ colnames(gages_spatial)
 12. What new field(s) appear in the sf dataframe created? What field(s), if any, disappeared?
 
 >ANSWER: 
+
 > The original fields in the regular dataframe were "site_no", "station_nm", "site_tp_cd", "dec_lat_va", "dec_long_va", "coord_acy_cd", and "dec_coord_datum_cd". In the new spatial dataframe, the two columns with the lat/long coordinates disappeared, and were replaced by a singular column called "geometry". This column contained point data for each row, along with each point's associated coordinates that were synthesized from the original lat/long columns.
 
 
@@ -123,9 +132,10 @@ colnames(gages_spatial)
 ggplot() + 
   geom_sf(data = ne_counties, fill = 'lightgray', color = 'black') +
   geom_sf(data = gages_spatial, color = 'red') +
-  ggtitle("NWIS Gage Locations in Nebraska") +
+  labs(title = "NWIS Gage Locations in Nebraska",
+       subtitle = "Ana Bishop") +
   theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
 ```
 
 
@@ -160,7 +170,7 @@ gage_flow_data <- left_join(gages_spatial, mean_gage_ht) %>% na.omit()
 colnames(gage_flow_data)
 
 #18. Show the dimensions of this joined dataset
-dim(gage_flow_data) #118 rows, 8 columns
+dim(gage_flow_data) #118 rows, 7 columns
 ```
 
 ### Map the pattern of gage height data
@@ -176,13 +186,21 @@ Now we can examine where the flooding appears most acute by visualizing gage hei
 ggplot() + 
   geom_sf(data = ne_counties, fill = 'white', color = 'black') +
   geom_sf(data=gage_flow_data, aes(color = MeanGageHT, geometry = geometry),alpha=.8) +
-  scale_color_gradient(low="lightpink",high="darkred")
+  scale_color_gradient(low="lightpink",high="darkred") +
+  labs(title = "Flooding Severity in Nebraska",
+       subtitle = "Ana Bishop",
+       color = "Mean Gage Height") +
+  theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
 
 #by size, in ggplot
 ggplot() +
   geom_sf(data = ne_counties, fill = 'white', color = 'black') +
   geom_sf(data=gage_flow_data, aes(size = MeanGageHT, geometry = geometry), alpha=.3, color = "darkgreen") +
-  scale_size_continuous(range = c(1, 7))
+  scale_size_continuous(range = c(1, 7)) +
+  labs(title = "Flooding Severity in Nebraska",
+       subtitle = "Ana Bishop",
+       size = "Mean Gage Height") +
+  theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
 
 #by size, in leaflet
 ne_counties_wgs84 <- st_transform(ne_counties, c=4326)
@@ -223,9 +241,10 @@ st_crs(gage_flow_data_utm) #good
 ggplot() + 
   geom_sf(data = ne_counties_utm, fill = 'white', color = 'black') +
   geom_sf(data = gage_flow_data_utm, color = 'red', alpha = 0.3) +
-  ggtitle("NWIS Gage Locations in Nebraska") +
+  labs(title = "NWIS Gage Locations in Nebraska",
+       subtitle = "Ana Bishop") +
   theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
 ```
 
 
@@ -254,9 +273,11 @@ ggplot() +
   geom_sf(data = ne_counties_utm, fill = 'white', color = 'black') +
   geom_sf(data = douglas_county, fill = "lightgray") +
   geom_sf(data = intersecting_gages, color = 'black', alpha = 0.5) +
-  ggtitle("NWIS Gage Locations in Douglas County, Nebraska") +
+  labs(title = "NWIS Gage Locations in Douglas County, Nebraska",
+       subtitle = "Ana Bishop") +
   theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
+
 
 #in mapview:
 mapview(ne_counties_utm, 
