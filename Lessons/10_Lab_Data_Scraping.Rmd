@@ -103,7 +103,25 @@ ggplot(gage_data,aes(x=datetime,y=discharge_cfs)) +
 > Alter the above code so that it plots the last 24 days of flow for gage 02085070
 
 ```{r pull.and.plot.other.discharge.data}
+#change site no and period (24 days) IN the url
+theURL_2 <- 'https://waterdata.usgs.gov/nwis/uv?search_site_no=02085070&period=24&format=rdb'
 
+#Get the data, which starts on line 30
+gage_data_2 <- read.table(theURL_2,skip = 29,header=TRUE,sep='\t',stringsAsFactors = T) 
+
+#Update the column headers
+colnames(gage_data_2) = c("agency_cd", "site_no", "datetime", "tz_cd",
+                        "discharge_cfs", "89192_00060_cd", "gage_ht_ft", "89193_00065_cd")
+
+#Tidy the data
+gage_data_2 <- gage_data_2 %>% 
+  select(datetime, discharge_cfs,gage_ht_ft) %>% 
+  mutate(datetime = ymd_hm(datetime))
+
+#Plot
+ggplot(gage_data_2,aes(x=datetime,y=discharge_cfs)) + 
+  geom_line() +
+  labs(x = "Date",y = "Discharge (cfs)")
 ```
 
 
@@ -116,10 +134,12 @@ More and more organizations are providing API access to their data. Have a look 
 And with the formalization of APIs, more R packages are being written to streamline access to data via these APIs. Let's look at some examples. 
 
 
-### Grabing discharge data via  the `dataRetrieval` package
+### Grabbing discharge data via  the `dataRetrieval` package
 More info: <https://cran.r-project.org/web/packages/dataRetrieval/vignettes/dataRetrieval.html>
 
 ```{r using.the.dataRetrieval.package}
+## this package is specifically for NWIS water data only, so that's why you don't need to specify the URL you're pulling from
+
 #Identify gauge to download
 siteNo <- '02087500' 
 
@@ -179,6 +199,16 @@ ggplot(nc_pop, aes(fill = estimate)) +
   coord_sf(crs = 4326) +
   scale_fill_viridis(option = "viridis")
 
+wy_pop <- 
+  get_acs(geography = "county",
+          variables = "B01003_001",
+          state = "WY",
+          geometry = TRUE)
+
+ggplot(wy_pop, aes(fill = estimate)) +
+  geom_sf() +
+  coord_sf(crs = 4326) +
+  scale_fill_viridis(option = "viridis")
 ```
 
 ## Scraping Exercises
@@ -205,16 +235,21 @@ The RVest scraping workflow is as follows:
 
 ```{r scrape.data.manually eval=FALSE}
 #1 Link to the web site using read_html
-the_website
+the_website <- read_html("https://www.eia.gov/electricity/state/")
 
 #2&3 Locate elements and read their text attributes into variables
-the_states <- 
-the_price <- 
-the_capacity <- 
-net_generation <- 
-total_retail <- 
+the_states <- html_nodes(the_website, 'td:nth-child(1)') %>% html_text()
+the_price <- html_nodes(the_website, 'td:nth-child(2)') %>% html_text()
+the_capacity <- html_nodes(the_website, 'td:nth-child(3)') %>% html_text()
+net_generation <- html_nodes(the_website, 'td:nth-child(4)') %>% html_text()
+total_retail <- html_nodes(the_website, 'td:nth-child(5)') %>% html_text()
   
 #3 Construct a dataframe from the values
+df_energy <- data.frame("State" = the_states,
+                             "Price" = as.numeric(the_price),
+                              "Capacity" = as.numeric(gsub(",","", (the_capacity)),
+                             "NetGeneration" = as.numeric(gsub(",","", (net_generation)),
+                             "TotalRetail" = as.numeric(gsub(",","", (total_retail)))
 ```
 
 
