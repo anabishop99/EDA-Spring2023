@@ -167,9 +167,8 @@ withdrawals_asheville <- scrape.function(2015, '01-11-010')
 comparison_2015 <- rbind(withdrawals_2015, withdrawals_asheville)
 
 ggplot() +
-  geom_line(data = withdrawals_2015, aes(x = Date, y = Max_Withdrawals_mgd, group = 1, col = Water_System_Name)) +
-  geom_line(data = withdrawals_asheville, aes(x = Date, y = Max_Withdrawals_mgd, group = 1, col = Water_System_Name)) +
-  labs(title = "2015 Maximum Daily Water Usage Comparision: Durham vs. Asheville", y = "Maximum Daily Use (MGD)", color = "City") +
+  geom_line(data = comparison_2015, aes(x = Date, y = Max_Withdrawals_mgd, color = Water_System_Name)) +
+  labs(title = "2015 Maximum Daily Water Usage Comparison Between Durham and Asheville", y = "Maximum Daily Use (MGD)", color = "City") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5)) 
 ```
@@ -187,7 +186,7 @@ timeseries_years <-  c(2010:2021)
 timeseries_pwsid <- rep.int("01-11-010",length(timeseries_years))
 
 #"Map" the "scrape.it" function to retrieve data for all these
-asheville_timeseries <- map2(timeseries_years, timeseries_pwsid, scrape.function) %>% bind_rows(asheville_timeseries)
+asheville_timeseries <- map2(timeseries_years, timeseries_pwsid, scrape.function) %>% bind_rows()
 
 #Plot
 ggplot() +
